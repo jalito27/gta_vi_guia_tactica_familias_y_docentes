@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>GTA VI // GUÍA TÁCTICA FAMILIAS &amp; DOCENTES — #UseTech4Good</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Syne (Display), Space Grotesk (Editorial), JetBrains Mono (Data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@800&display=swap" rel="stylesheet" />
+
+  <!-- html2pdf.js & QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Syne', 'sans-serif'],
+            sans: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            ink: '#0B0B0C',
+            paper: '#F3F2EC',
+            vicepink: '#FF2E93',
+            vicecyan: '#00E5FF',
+            acid: '#D9FF00',
+          },
+          boxShadow: {
+            'brutal': '6px 6px 0px 0px #0B0B0C',
+            'brutal-sm': '4px 4px 0px 0px #0B0B0C',
+            'brutal-lg': '10px 10px 0px 0px #0B0B0C',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: #F3F2EC;
+      background-image:
+        linear-gradient(to right, rgba(11, 11, 12, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(11, 11, 12, 0.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+      color: #0B0B0C;
+      overflow-x: hidden;
+    }
+
+    /* Tipografía fluida calibrada para Syne sin desbordes */
+    .hero-headline {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      font-size: clamp(2.15rem, 4.7vw, 4.3rem);
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    .pegi-stamp {
+      display: inline-block;
+      background-color: #FF2E93;
+      color: #FFFFFF;
+      border: 3px solid #0B0B0C;
+      box-shadow: 5px 5px 0px 0px #0B0B0C;
+      padding: 0.08em 0.3em;
+      transform: rotate(-1.5deg);
+      max-width: 100%;
+    }
+
+    /* Marquee cinético */
+    @keyframes ticker {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 26s linear infinite;
+    }
+
+    /* Botones tácticos */
+    .tactical-btn {
+      border: 3px solid #0B0B0C;
+      box-shadow: 4px 4px 0px 0px #0B0B0C;
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.15s ease;
+    }
+    .tactical-btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 1px 1px 0px 0px #0B0B0C;
+    }
+
+    .motive-tab.active {
+      background-color: #0B0B0C;
+      color: #D9FF00;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #FF2E93;
+    }
+
+    /* Checklist interactivo */
+    .shield-input:checked + .shield-box {
+      background-color: #D9FF00;
+    }
+    .shield-input:checked + .shield-box svg {
+      opacity: 1;
+    }
+    .shield-input:checked ~ .shield-label {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #FFFFFF !important; }
+      .shadow-brutal, .shadow-brutal-sm, .shadow-brutal-lg { box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-vicepink selection:text-white">
+
+  <!-- BARRA EDITORIAL SUPERIOR -->
+  <header class="no-print sticky top-0 z-40 bg-paper/95 backdrop-blur-xs border-b-4 border-ink">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3 min-w-0">
+        <span class="bg-ink text-acid font-mono font-extrabold text-xs px-2.5 py-1 border-2 border-ink shrink-0">
+          #UseTech4Good
+        </span>
+        <span class="font-mono text-xs font-bold uppercase tracking-wider truncate hidden md:inline">
+          HUMAN TECH // RADAR GAMING EN CASA Y AULA
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button onclick="openQRModal()" class="tactical-btn bg-white hover:bg-vicecyan text-ink font-mono font-extrabold text-xs px-3 py-2 flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="square" d="M3 3h6v6H3V3zm12 0h6v6h-6V3zM3 15h6v6H3v-6zm12 0h2v2h-2v-2zm4 0h2v6h-6v-2h4v-4zm-4 4h2v2h-2v-2z"/>
+          </svg>
+          <span class="hidden sm:inline">COMPARTIR QR</span>
+        </button>
+
+        <button onclick="exportPDF()" id="pdf-btn" class="tactical-btn bg-acid hover:bg-lime-300 text-ink font-mono font-extrabold text-xs px-3.5 py-2 flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="square" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16"/>
+          </svg>
+          <span>HOJA DE RUTA PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CINTA CINÉTICA -->
+  <div class="bg-ink text-acid border-b-4 border-ink overflow-hidden py-2 no-print">
+    <div class="ticker-track font-mono text-xs font-extrabold uppercase tracking-widest flex gap-8">
+      <span>/// PEGI 18 NO ES DIFICULTAD TÉCNICA: ES MADUREZ EMOCIONAL</span>
+      <span class="text-vicecyan">/// EL "NO" SIN EXPLICACIÓN DISPARA EL DESEO</span>
+      <span>/// SENTATE 10 MINUTOS AL LADO SIN SERMONES</span>
+      <span class="text-vicepink">/// CONFIGURÁ EL CONTROL PARENTAL CON ELLOS, NO A ESCONDIDAS</span>
+      <span>/// PEGI 18 NO ES DIFICULTAD TÉCNICA: ES MADUREZ EMOCIONAL</span>
+      <span class="text-vicecyan">/// EL "NO" SIN EXPLICACIÓN DISPARA EL DESEO</span>
+      <span>/// SENTATE 10 MINUTOS AL LADO SIN SERMONES</span>
+      <span class="text-vicepink">/// CONFIGURÁ EL CONTROL PARENTAL CON ELLOS, NO A ESCONDIDAS</span>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR PRINCIPAL BENTO ASIMÉTRICO -->
+  <main id="printable-canvas" class="max-w-7xl mx-auto px-4 sm:px-6 pt-7 sm:pt-10 pb-16 space-y-8">
+
+    <!-- FILA 1: HERO ASIMÉTRICO (7 COLS) + DECODIFICADOR PEGI 18 (5 COLS) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+      <!-- Bloque Izquierdo: Manifiesto Editorial -->
+      <div class="lg:col-span-7 bg-white border-4 border-ink shadow-brutal p-6 sm:p-9 flex flex-col justify-between overflow-hidden">
+        <div class="space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="bg-vicecyan text-ink font-mono font-extrabold text-[11px] sm:text-xs px-2.5 py-1 border-2 border-ink uppercase">
+              FAMILIAS + ESCUELAS
+            </span>
+            <span class="bg-paper text-ink font-mono font-bold text-[11px] sm:text-xs px-2.5 py-1 border-2 border-ink uppercase">
+              EDICIÓN LANZAMIENTO GTA VI
+            </span>
+          </div>
+
+          <h1 class="hero-headline uppercase text-ink">
+            <span class="block">GTA VI EN</span>
+            <span class="block">EL RADAR:</span>
+            <span class="pegi-stamp my-1">BORDES</span>
+            <span class="block mt-1">SIN PÁNICO.</span>
+          </h1>
+        </div>
+
+        <div class="mt-7 pt-5 border-t-4 border-ink flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <p class="text-base sm:text-lg font-bold leading-snug max-w-md">
+            El debate no es si van a escuchar hablar del juego en el patio o en Twitch. El punto es cómo acompañás vos cuando pidan jugarlo.
+          </p>
+          <div class="bg-ink text-white font-mono text-xs px-3 py-2 border-2 border-ink shrink-0">
+            <span class="text-acid font-extrabold block">22.8M+</span>
+            JUGADORES ACTIVOS (AEVI)
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloque Derecho: Decodificador PEGI 18 -->
+      <aside class="lg:col-span-5 bg-ink text-paper border-4 border-ink shadow-brutal p-6 sm:p-8 flex flex-col justify-between space-y-6 overflow-hidden">
+        <div class="flex items-center justify-between border-b-2 border-neutral-800 pb-3">
+          <span class="font-mono text-xs font-extrabold text-vicepink uppercase tracking-wider">
+            01 // EL MITO DEL +18
+          </span>
+          <span class="bg-vicepink text-white font-display font-extrabold text-lg px-2.5 py-0.5 border-2 border-white">
+            18
+          </span>
+        </div>
+
+        <div class="space-y-4">
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold uppercase leading-tight text-acid">
+            NO MIDE HABILIDAD. MIDE IMPACTO.
+          </h2>
+          <p class="text-sm sm:text-base text-neutral-200 leading-relaxed">
+            Que un chico de 12 años maneje el joystick mejor que vos no significa que esté listo para procesar violencia explícita, crimen, lenguaje adulto o chats abiertos sin filtro.
+          </p>
+        </div>
+
+        <div class="space-y-2.5 font-mono text-xs">
+          <div class="bg-neutral-900 border-2 border-neutral-700 p-3 flex items-center justify-between">
+            <span class="text-neutral-300">VIOLENCIA &amp; CRIMEN EXPLÍCITO</span>
+            <span class="text-vicepink font-bold">[DESCRIPTOR]</span>
+          </div>
+          <div class="bg-neutral-900 border-2 border-neutral-700 p-3 flex items-center justify-between">
+            <span class="text-neutral-300">LENGUAJE SOEZ &amp; SUSTANCIAS</span>
+            <span class="text-vicepink font-bold">[DESCRIPTOR]</span>
+          </div>
+          <div class="bg-neutral-900 border-2 border-neutral-700 p-3 flex items-center justify-between">
+            <span class="text-neutral-300">ONLINE + MICROTRANSACCIONES</span>
+            <span class="text-vicecyan font-bold">[RIESGO EXTRA]</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- FILA 2: SELECTOR INTERACTIVO — ¿POR QUÉ LO PIDEN? -->
+    <section class="bg-white border-4 border-ink shadow-brutal p-5 sm:p-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b-4 border-ink pb-4 mb-6">
+        <div>
+          <span class="bg-acid font-mono text-xs font-extrabold px-2.5 py-1 border-2 border-ink uppercase">
+            02 // LECTURA DE CONTEXTO
+          </span>
+          <h2 class="font-display text-2xl sm:text-4xl font-extrabold uppercase mt-2 tracking-tight">
+            ¿QUÉ BUSCAN REALMENTE CUANDO PIDEN GTA VI?
+          </h2>
+        </div>
+        <span class="font-mono text-xs font-bold text-neutral-600 uppercase">
+          TOCÁ CADA MOTOR PARA VER CÓMO RESPONDER
+        </span>
+      </div>
+
+      <!-- Pestañas Interactivas -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6 no-print">
+        <button onclick="selectMotive(0)" id="m-tab-0" class="motive-tab active tactical-btn bg-paper p-4 text-left font-mono text-xs sm:text-sm font-extrabold cursor-pointer">
+          <span class="block text-[11px] opacity-75 mb-1">[MOTOR 01]</span>
+          PERTENENCIA EN EL RECREO
+        </button>
+
+        <button onclick="selectMotive(1)" id="m-tab-1" class="motive-tab tactical-btn bg-paper p-4 text-left font-mono text-xs sm:text-sm font-extrabold cursor-pointer">
+          <span class="block text-[11px] opacity-75 mb-1">[MOTOR 02]</span>
+          LIBERTAD DE MUNDO ABIERTO
+        </button>
+
+        <button onclick="selectMotive(2)" id="m-tab-2" class="motive-tab tactical-btn bg-paper p-4 text-left font-mono text-xs sm:text-sm font-extrabold cursor-pointer">
+          <span class="block text-[11px] opacity-75 mb-1">[MOTOR 03]</span>
+          EL EFECTO STREAMER / TWITCH
+        </button>
+
+        <button onclick="selectMotive(3)" id="m-tab-3" class="motive-tab tactical-btn bg-paper p-4 text-left font-mono text-xs sm:text-sm font-extrabold cursor-pointer">
+          <span class="block text-[11px] opacity-75 mb-1">[MOTOR 04]</span>
+          CURIOSIDAD POR LO "PROHIBIDO"
+        </button>
+      </div>
+
+      <!-- Contenedor Dinámico de Respuesta -->
+      <div id="motive-display" class="bg-paper border-4 border-ink p-5 sm:p-7">
+        <!-- Renderizado por JS -->
+      </div>
+    </section>
+
+    <!-- FILA 3: BENTO ASIMÉTRICO — MEDIACIÓN ELEGANTE (5 COLS) + ESCUDO TÉCNICO (7 COLS) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+      <!-- Columna Izquierda: 3 Jugadas de Mediación (5 cols) -->
+      <div class="lg:col-span-5 bg-vicecyan border-4 border-ink shadow-brutal p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div>
+          <span class="bg-ink text-white font-mono text-xs font-extrabold px-2.5 py-1 uppercase">
+            03 // MEDIACIÓN SIN SERMONES
+          </span>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold uppercase mt-3 leading-none">
+            CÓMO DECIR QUE NO SIN VOLVERLO IRRESISTIBLE
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="bg-white border-3 border-ink p-4">
+            <span class="font-mono text-xs font-extrabold text-vicepink block uppercase mb-1">
+              JUGADA A // APLAZAMIENTO EXPLICADO
+            </span>
+            <p class="text-sm font-medium leading-snug">
+              Evitá el <em>"porque lo digo yo"</em>. Revisen juntos los iconos PEGI/ESRB en pantalla y pactá: <strong>"Este título es para otra etapa; hoy elegimos uno que puedas disfrutar sin filtros"</strong>.
+            </p>
+          </div>
+
+          <div class="bg-white border-3 border-ink p-4">
+            <span class="font-mono text-xs font-extrabold text-ink bg-acid px-1.5 inline-block uppercase mb-1">
+              JUGADA B // CAMBIO DE MECÁNICA
+            </span>
+            <p class="text-sm font-medium leading-snug">
+              Si busca velocidad, exploración o equipo, proponé alternativas acordes a su edad (conducción realista, aventura o construcción creativa) que cubran esa misma necesidad.
+            </p>
+          </div>
+
+          <div class="bg-white border-3 border-ink p-4">
+            <span class="font-mono text-xs font-extrabold text-vicepink block uppercase mb-1">
+              JUGADA C // CERO MONEDA DE CAMBIO
+            </span>
+            <p class="text-sm font-medium leading-snug">
+              No uses la consola como premio ni la saques como castigo impulsivo. Darle peso emocional extremo convierte al juego en el centro de todas las peleas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna Derecha: Checklist Técnico de Control Parental (7 cols) -->
+      <div class="lg:col-span-7 bg-white border-4 border-ink shadow-brutal p-6 sm:p-8 flex flex-col justify-between space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b-4 border-ink pb-4">
+          <div>
+            <span class="bg-vicepink text-white font-mono text-xs font-extrabold px-2.5 py-1 border-2 border-ink uppercase">
+              04 // RESPALDO TÉCNICO TRANSPARENTE
+            </span>
+            <h2 class="font-display text-2xl sm:text-3xl font-extrabold uppercase mt-2 leading-none">
+              CANDADOS QUE SE CONFIGURAN CON ELLOS
+            </h2>
+          </div>
+
+          <div id="tech-counter" class="bg-ink text-acid font-mono text-xs font-extrabold px-3 py-1.5 border-2 border-ink">
+            0 / 5 ACTIVADOS
+          </div>
+        </div>
+
+        <div class="space-y-3" id="tech-checklist">
+          <label class="flex items-start gap-3 p-3.5 bg-paper border-2 border-ink cursor-pointer hover:bg-yellow-50 transition">
+            <input type="checkbox" onchange="updateTechCount()" class="shield-input sr-only" />
+            <span class="shield-box w-6 h-6 border-2 border-ink bg-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 opacity-0 transition" fill="none" stroke="#0B0B0C" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span class="shield-label text-sm leading-snug">
+              <strong class="font-mono text-xs block uppercase">[01] PERFIL CON EDAD REAL:</strong>
+              Configurar cuenta infantil/juvenil en PlayStation, Xbox, Nintendo Switch o Steam para bloquear descargas +18 de raíz.
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 bg-paper border-2 border-ink cursor-pointer hover:bg-yellow-50 transition">
+            <input type="checkbox" onchange="updateTechCount()" class="shield-input sr-only" />
+            <span class="shield-box w-6 h-6 border-2 border-ink bg-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 opacity-0 transition" fill="none" stroke="#0B0B0C" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span class="shield-label text-sm leading-snug">
+              <strong class="font-mono text-xs block uppercase">[02] BILLETERA CON CONTRASEÑA:</strong>
+              Desvincular tarjetas de crédito o exigir PIN adulto antes de cualquier microtransacción dentro del juego.
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 bg-paper border-2 border-ink cursor-pointer hover:bg-yellow-50 transition">
+            <input type="checkbox" onchange="updateTechCount()" class="shield-input sr-only" />
+            <span class="shield-box w-6 h-6 border-2 border-ink bg-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 opacity-0 transition" fill="none" stroke="#0B0B0C" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span class="shield-label text-sm leading-snug">
+              <strong class="font-mono text-xs block uppercase">[03] FILTRO DE CHAT DE VOZ:</strong>
+              Limitar la comunicación online únicamente a amigos conocidos y bloquear mensajes de desconocidos.
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 bg-paper border-2 border-ink cursor-pointer hover:bg-yellow-50 transition">
+            <input type="checkbox" onchange="updateTechCount()" class="shield-input sr-only" />
+            <span class="shield-box w-6 h-6 border-2 border-ink bg-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 opacity-0 transition" fill="none" stroke="#0B0B0C" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span class="shield-label text-sm leading-snug">
+              <strong class="font-mono text-xs block uppercase">[04] PANTALLAS EN ZONA COMÚN:</strong>
+              Priorizar el juego en el living o espacios compartidos del hogar en lugar de dormitorios cerrados.
+            </span>
+          </label>
+
+          <label class="flex items-start gap-3 p-3.5 bg-paper border-2 border-ink cursor-pointer hover:bg-yellow-50 transition">
+            <input type="checkbox" onchange="updateTechCount()" class="shield-input sr-only" />
+            <span class="shield-box w-6 h-6 border-2 border-ink bg-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-4 h-4 opacity-0 transition" fill="none" stroke="#0B0B0C" stroke-width="3.5" viewBox="0 0 24 24"><path stroke-linecap="square" d="M5 13l4 4L19 7"/></svg>
+            </span>
+            <span class="shield-label text-sm leading-snug">
+              <strong class="font-mono text-xs block uppercase">[05] CORTE 60 MIN ANTES DE DORMIR:</strong>
+              Pactar el apagado previo al descanso para proteger el sueño y evitar discusiones nocturnas.
+            </span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILA 4: REGLA DE LOS 10 MINUTOS + PREGUNTAS DISPARADORAS PARA CASA Y AULA -->
+    <section class="bg-acid border-4 border-ink shadow-brutal p-6 sm:p-9">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div class="lg:col-span-5 space-y-3">
+          <span class="bg-ink text-acid font-mono text-xs font-extrabold px-2.5 py-1 uppercase">
+            05 // ACCIÓN ESTA SEMANA
+          </span>
+          <h2 class="font-display text-3xl sm:text-5xl font-extrabold uppercase leading-[0.95] tracking-tight">
+            LA REGLA DE LOS 10 MINUTOS.
+          </h2>
+          <p class="text-sm sm:text-base font-bold leading-snug">
+            No necesitás saber usar el joystick para ser un buen referente. Sentate 10 minutos al lado mientras juega, mirá sin juzgar y entrená su criterio con estas tres preguntas:
+          </p>
+        </div>
+
+        <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs sm:text-sm">
+          <div class="bg-white border-3 border-ink p-4 shadow-brutal-sm flex flex-col justify-between space-y-3">
+            <span class="bg-vicepink text-white font-extrabold px-2 py-0.5 w-fit">PREGUNTA 01</span>
+            <p class="font-sans font-bold text-base leading-snug">
+              "¿Qué es lo que más te divierte o te atrapa de este mundo?"
+            </p>
+            <span class="text-[11px] text-neutral-600">// ABRÍS EL CANAL SIN INTERROGATORIO</span>
+          </div>
+
+          <div class="bg-white border-3 border-ink p-4 shadow-brutal-sm flex flex-col justify-between space-y-3">
+            <span class="bg-vicecyan text-ink font-extrabold px-2 py-0.5 border border-ink w-fit">PREGUNTA 02</span>
+            <p class="font-sans font-bold text-base leading-snug">
+              "¿Por qué creés que este personaje actúa así? ¿Pasa esto en la vida real?"
+            </p>
+            <span class="text-[11px] text-neutral-600">// ENTRENÁS LECTURA CRÍTICA DE FICCIÓN</span>
+          </div>
+
+          <div class="bg-white border-3 border-ink p-4 shadow-brutal-sm flex flex-col justify-between space-y-3">
+            <span class="bg-ink text-acid font-extrabold px-2 py-0.5 w-fit">PREGUNTA 03</span>
+            <p class="font-sans font-bold text-base leading-snug">
+              "Si viste clips en TikTok o Twitch, ¿qué parte te incomodó o te pareció exagerada?"
+            </p>
+            <span class="text-[11px] text-neutral-600">// PROCESÁS LO QUE YA MIRAN EN REDES</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER EDITORIAL CON LICENCIA ABIERTA -->
+    <footer class="border-t-4 border-ink pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 font-mono text-xs">
+      <div>
+        <span class="font-extrabold uppercase block text-ink">
+          #UseTech4Good // #HumanTech — Javier Lombardi (@Jalito27)
+        </span>
+        <span class="text-neutral-700">
+          Basado en guías de mediación PEGI, AEVI &amp; acompañamiento familiar en gaming.
+        </span>
+      </div>
+
+      <div class="text-neutral-700 sm:text-right">
+        <p>
+          Contenido: <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" class="underline font-bold text-ink">CC BY-SA 4.0</a> | Código: <a href="https://opensource.org/licenses/MIT" target="_blank" class="underline font-bold text-ink">MIT License</a>
+        </p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- MODAL CÓDIGO QR -->
+  <div id="qr-modal" class="no-print fixed inset-0 z-50 bg-ink/85 backdrop-blur-xs hidden items-center justify-center p-4">
+    <div class="bg-white border-4 border-ink shadow-brutal-lg max-w-sm w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b-2 border-ink pb-2">
+        <span class="font-mono text-xs font-extrabold uppercase">COMPARTIR EN GRUPOS DE FAMILIAS</span>
+        <button onclick="closeQRModal()" class="bg-vicepink text-white font-mono font-extrabold text-xs px-2.5 py-1 border-2 border-ink cursor-pointer">X</button>
+      </div>
+      <div id="qrcode" class="flex justify-center p-4 bg-paper border-3 border-ink mx-auto w-fit"></div>
+      <p id="qr-url-text" class="font-mono text-[11px] break-all bg-paper p-2 border-2 border-ink text-center"></p>
+    </div>
+  </div>
+
+  <script>
+    const motives = [
+      {
+        tag: "MOTOR 01 // COMPONENTE SOCIAL",
+        title: "NO QUIERE VIOLENCIA: NO QUIERE QUEDARSE AFUERA DEL GRUPO",
+        diagnosis: "Cuando todo el curso habla del lanzamiento en el recreo o en Discord, pedir el juego es una forma de pedir pertenencia.",
+        action: "Validá su necesidad social sin ceder el límite de edad. Proponele armar un plan presencial o multijugador acorde a su etapa con sus mismos amigos, y conversen sobre cómo poner límites frente a la presión grupal."
+      },
+      {
+        tag: "MOTOR 02 // MECÁNICAS DE JUEGO",
+        title: "LE ATRAE LA LIBERTAD DEL MAPA, LOS AUTOS Y LA EXPLORACIÓN",
+        diagnosis: "La franquicia GTA brilla por ofrecer ciudades gigantes donde podés manejar, personalizar ropa o explorar sin seguir un guion rígido.",
+        action: "Ofrecé títulos con mecánicas equivalentes pero clasificación apta: juegos de conducción abierta (Forza Horizon, Gran Turismo), exploración creativa (Minecraft, Zelda) o deportes."
+      },
+      {
+        tag: "MOTOR 03 // CREADORES DE CONTENIDO",
+        title: "LO VE TODOS LOS DÍAS EN YOUTUBE, TIKTOK O TWITCH",
+        diagnosis: "Aunque no tenga el juego instalado en casa, ya consume recortes editados por sus streamers favoritos.",
+        action: "Mirar juntos un fragmento o tráiler oficial en el televisor del living te permite frenar la imagen y preguntar: '¿Ves cómo acá se normaliza algo que en la calle tiene consecuencias graves?'"
+      },
+      {
+        tag: "MOTOR 04 // EFECTO DE LO PROHIBIDO",
+        title: "EL CARTEL +18 FUNCIONA COMO IMÁN DE CURIOSIDAD",
+        diagnosis: "La prohibición seca ('está prohibido y punto') dispara el deseo de jugarlo a escondidas en casa de otro compañero.",
+        action: "Usá el aplazamiento consensuado: mostrá los descriptores oficiales de contenido y explicá con calma qué temas adultos aparecen ahí adentro y por qué van a esperar a que tenga la edad adecuada."
+      }
+    ];
+
+    function selectMotive(idx) {
+      document.querySelectorAll('.motive-tab').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+
+      const m = motives[idx];
+      const box = document.getElementById('motive-display');
+      box.innerHTML = `
+        <div class="space-y-4">
+          <span class="inline-block bg-ink text-acid font-mono text-xs font-extrabold px-2.5 py-1">${m.tag}</span>
+          <h3 class="font-display text-xl sm:text-3xl font-extrabold uppercase leading-tight">${m.title}</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div class="bg-white border-2 border-ink p-4">
+              <span class="font-mono text-xs font-extrabold text-vicepink block uppercase mb-1">QUÉ ESTÁ PASANDO:</span>
+              <p class="text-sm sm:text-base leading-snug">${m.diagnosis}</p>
+            </div>
+            <div class="bg-white border-2 border-ink p-4">
+              <span class="font-mono text-xs font-extrabold text-ink bg-vicecyan px-1.5 inline-block uppercase mb-1">CÓMO INTERVENIR:</span>
+              <p class="text-sm sm:text-base leading-snug font-medium">${m.action}</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateTechCount() {
+      const inputs = document.querySelectorAll('#tech-checklist input[type="checkbox"]');
+      const done = Array.from(inputs).filter(i => i.checked).length;
+      document.getElementById('tech-counter').textContent = `${done} / ${inputs.length} ACTIVADOS`;
+    }
+
+    let qrBuilt = false;
+    function openQRModal() {
+      const modal = document.getElementById('qr-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      const url = window.location.href;
+      document.getElementById('qr-url-text').textContent = url;
+
+      if (!qrBuilt) {
+        new QRCode(document.getElementById('qrcode'), {
+          text: url,
+          width: 170,
+          height: 170,
+          colorDark: '#0B0B0C',
+          colorLight: '#F3F2EC',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        qrBuilt = true;
+      }
+    }
+
+    function closeQRModal() {
+      const modal = document.getElementById('qr-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function exportPDF() {
+      const btn = document.getElementById('pdf-btn');
+      const prev = btn.innerHTML;
+      btn.innerHTML = '<span>GENERANDO...</span>';
+
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        if (cb.checked) cb.setAttribute('checked', 'checked');
+        else cb.removeAttribute('checked');
+      });
+
+      const opt = {
+        margin: [8, 8, 8, 8],
+        filename: 'Guia_Tactica_GTA_VI_Familias_Docentes_UseTech4Good.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(document.getElementById('printable-canvas')).save().then(() => {
+        btn.innerHTML = prev;
+      });
+    }
+
+    window.addEventListener('click', (e) => {
+      if (e.target === document.getElementById('qr-modal')) closeQRModal();
+    });
+
+    selectMotive(0);
+  </script>
+</body>
+</html>
